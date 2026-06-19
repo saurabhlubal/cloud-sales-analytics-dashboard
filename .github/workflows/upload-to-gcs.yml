@@ -1,4 +1,4 @@
-name: Upload CSV to GCS
+name: Upload CSVs to GCS
 
 on:
   push:
@@ -10,16 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      # Step 1: Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Authenticate to Google Cloud
+      # Step 2: Authenticate to Google Cloud
+      - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          credentials_json: ${{ secrets.gcp-sa-key }}
 
-      - name: Upload file to Cloud Storage
-        uses: google-github-actions/upload-cloud-storage@v2
-        with:
-          path: sample-data/sales.csv
-          destination: sales-data-bucket-saurabh
+      # Step 3: Setup gcloud CLI
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      # Step 4: Upload ALL CSV files automatically
+      - name: Upload CSV files to GCS
+        run: |
+          gsutil cp sample-data/*.csv gs://sales-data-bucket-saurabh/
