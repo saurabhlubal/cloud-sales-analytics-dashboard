@@ -21,9 +21,9 @@ jobs:
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Debug files (check CSV exists)
+      - name: Debug files
         run: ls -R
 
-      - name: Upload CSV to GCS
+      - name: Upload ALL CSVs to GCS
         run: |
-          gsutil cp sample-data/sales2.csv gs://sales-data-bucket-saurabh/
+          gsutil cp sample-data/*.csv gs://sales-data-bucket-saurabh/
